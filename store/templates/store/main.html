@@ -11,6 +11,28 @@
 
     <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
 
+    <script type="text/javascript">
+        var user = '{{ request.user }}'
+
+        function getToken(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        const csrftoken = getToken('csrftoken');
+    </script>
+
 </head>
 <body>
 
@@ -23,10 +45,19 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-                <a class="nav-link" href="{% url 'store' %}">Store <span class="sr-only">(current)</span></a>
+            <!--            <li class="nav-item active">-->
+            <!--                <a class="nav-link" href="{% url 'store' %}">Store <span class="sr-only">(current)</span></a>-->
+            <!--            </li>-->
+            <li class="nav-item dropdown active">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="false">
+                    Categories
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="{% url 'store' %}">Store <span class="sr-only">(current)</span></a>
+                    <a class="dropdown-item" href="">Technique</a>
+                </div>
             </li>
-
         </ul>
         <div class="form-inline my-2 my-lg-0">
             <a href="#" class="btn btn-warning">Login</a>
@@ -34,7 +65,7 @@
             <a href="{% url 'card' %}">
                 <img id="cart-icon" src="{% static 'images/cart.png' %}">
             </a>
-            <p id="cart-total">0</p>
+            <p id="cart-total">{{ cartItems }}</p>
 
         </div>
     </div>
@@ -59,5 +90,6 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
         integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
         crossorigin="anonymous"></script>
+<script type="text/javascript" src="{% static 'js/cart.js' %}"></script>
 </body>
 </html>
